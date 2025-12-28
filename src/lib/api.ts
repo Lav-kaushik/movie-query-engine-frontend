@@ -20,7 +20,7 @@ export async function searchMovies(query: string): Promise<Movie[]> {
     return data;
   }
   
-  return data.results || [];
+  return data.result || [];
 }
 
 export async function getMovieDetails(movieId: number): Promise<MovieDetails> {

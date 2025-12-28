@@ -1,20 +1,17 @@
 export interface Movie {
   id: number;
   title: string;
-  poster: string | null;
+  poster_url: string | null;
   rating: number;
-  year: string;
-  genres: string[];
+  release_year: number | null;
+  genre: string[];
 }
 
 export interface MovieDetails extends Movie {
   overview: string;
-  cast: CastMember[];
+  cast: string[];
   directors: string[];
-  trailer: string | null;
-  runtime: number;
-  tagline?: string;
-  backdrop?: string;
+  trailer_url: string | null;
 }
 
 export interface CastMember {
@@ -25,6 +22,5 @@ export interface CastMember {
 }
 
 export interface SearchResponse {
-  results: Movie[];
-  query: string;
+  result: Movie[];
 }

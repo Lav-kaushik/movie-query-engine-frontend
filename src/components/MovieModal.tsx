@@ -64,60 +64,33 @@ export function MovieModal({ movie, isLoading, error, isOpen, onClose }: MovieMo
 
         {movie && !isLoading && !error && (
           <div className="overflow-y-auto max-h-[90vh]">
-            {/* Backdrop */}
-            <div className="relative h-64 md:h-80 overflow-hidden">
-              {movie.backdrop ? (
-                <img
-                  src={getBackdropUrl(movie.backdrop)}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-secondary to-muted" />
-              )}
-              
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
-              
-              {/* Close button */}
-              <button
-                onClick={onClose}
-                className="
-                  absolute top-4 right-4 p-2 rounded-full
-                  bg-background/80 backdrop-blur-sm
-                  hover:bg-background transition-colors
-                "
-              >
-                <X className="w-5 h-5" />
-              </button>
+            {/* Backdrop
+                <div className="relative h-72 md:h-96 overflow-hidden">
+                  <img
+                    src={movie.poster_url}
+                    alt={movie.title}
+                    className="absolute inset-0 w-full h-full object-cover blur-sm scale-110"
+                  />
 
-              {/* Trailer button */}
-              {movie.trailer && (
-                <a
-                  href={movie.trailer}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="
-                    absolute bottom-6 right-6 flex items-center gap-2
-                    px-5 py-3 rounded-xl
-                    bg-primary text-primary-foreground font-semibold
-                    hover:bg-primary/90 transition-all
-                    shadow-lg hover:shadow-xl hover:scale-105
-                  "
-                >
-                  <Play className="w-5 h-5 fill-current" />
-                  Watch Trailer
-                </a>
-              )}
-            </div>
+                  <div className="absolute inset-0 bg-black/60" />
+
+                  <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 p-2 rounded-full
+                              bg-black/50 hover:bg-black/70 transition"
+                  >
+                    <X className="w-5 h-5 text-white" />
+                  </button>
+                </div> */}
+            
 
             {/* Content */}
-            <div className="relative px-6 pb-8 -mt-20">
+            <div className="relative px-6 pb-8 mt-8">
               <div className="flex flex-col md:flex-row gap-6">
                 {/* Poster */}
                 <div className="flex-shrink-0 w-40 md:w-48">
                   <img
-                    src={getPosterUrl(movie.poster, "w500")}
+                    src={getPosterUrl(movie.poster_url, "w500")}
                     alt={movie.title}
                     className="w-full rounded-xl shadow-2xl"
                   />
@@ -130,21 +103,9 @@ export function MovieModal({ movie, isLoading, error, isOpen, onClose }: MovieMo
                     {movie.title}
                   </h2>
 
-                  {/* Tagline */}
-                  {movie.tagline && (
-                    <p className="text-primary italic mb-4">{movie.tagline}</p>
-                  )}
-
                   {/* Meta */}
                   <div className="flex flex-wrap items-center gap-4 text-sm mb-6">
-                    <span className="text-muted-foreground">{movie.year}</span>
-                    
-                    {movie.runtime > 0 && (
-                      <span className="flex items-center gap-1 text-muted-foreground">
-                        <Clock className="w-4 h-4" />
-                        {formatRuntime(movie.runtime)}
-                      </span>
-                    )}
+                    <span className="text-muted-foreground">{movie.release_year}</span>
                     
                     {movie.rating > 0 && (
                       <span className="flex items-center gap-1 font-semibold">
@@ -155,9 +116,9 @@ export function MovieModal({ movie, isLoading, error, isOpen, onClose }: MovieMo
                   </div>
 
                   {/* Genres */}
-                  {movie.genres?.length > 0 && (
+                  {movie.genre?.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {movie.genres.map((genre) => (
+                      {movie.genre.map((genre) => (
                         <span
                           key={genre}
                           className="px-3 py-1 text-sm rounded-full bg-secondary text-secondary-foreground"
@@ -189,13 +150,34 @@ export function MovieModal({ movie, isLoading, error, isOpen, onClose }: MovieMo
               {movie.cast?.length > 0 && (
                 <div className="mt-8">
                   <h3 className="font-display text-2xl mb-4">Cast</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {movie.cast.slice(0, 10).map((person) => (
-                      <CastCard key={person.id} person={person} />
+                  <div className="flex flex-wrap gap-2">
+                    {movie.cast.slice(0, 10).map((name, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-2 rounded-full bg-secondary text-secondary-foreground text-sm"
+                      >
+                        {name}
+                      </span>
                     ))}
                   </div>
                 </div>
               )}
+
+            {/* Trailer*/}
+            {movie.trailer_url && (
+              <div className="px-6 mt-8">
+                <h3 className="font-display text-2xl mb-4">Trailer</h3>
+                <div className="mx-auto max-w-3xl aspect-video rounded-xl overflow-hidden bg-black shadow-lg">
+                  <iframe
+                    src={getEmbedUrl(movie.trailer_url)}
+                    title={`${movie.title} Trailer`}
+                    className="w-full h-full"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            )}
+
             </div>
           </div>
         )}
@@ -228,3 +210,11 @@ function CastCard({ person }: { person: CastMember }) {
     </div>
   );
 }
+
+const getEmbedUrl = (url: string) => {
+  const match = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+};
+

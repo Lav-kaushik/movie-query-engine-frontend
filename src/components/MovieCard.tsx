@@ -24,7 +24,7 @@ export function MovieCard({ movie, onClick, index }: MovieCardProps) {
       {/* Poster */}
       <div className="relative aspect-[2/3] overflow-hidden bg-muted">
         <img
-          src={getPosterUrl(movie.poster, "w500")}
+          src={getPosterUrl(movie.poster_url, "w500")}
           alt={movie.title}
           className="
             w-full h-full object-cover
@@ -65,10 +65,10 @@ export function MovieCard({ movie, onClick, index }: MovieCardProps) {
         </h3>
 
         <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>{movie.year}</span>
-          {movie.genres?.length > 0 && (
+          <span>{movie.release_year}</span>
+          {movie.genre?.length > 0 && (
             <span className="text-xs truncate max-w-[60%]">
-              {movie.genres.slice(0, 2).join(" • ")}
+              {movie.genre.slice(0, 2).join(" • ")}
             </span>
           )}
         </div>

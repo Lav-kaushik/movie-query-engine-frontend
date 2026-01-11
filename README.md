@@ -43,3 +43,12 @@ This will start the development server with hot reloading. Open your browser and
 
 To deploy your project, follow your preferred deployment process (e.g., Vercel, Render , or your own server).
 
+## Dockerfile
+
+```
+docker build   --build-arg VITE_API_URL=http://localhost:8000   -t frontend-app:v1 .
+
+docker run -p 3000:80 --name frontend-app frontend-app:v1
+```
+Access the app on localhost:3000
+

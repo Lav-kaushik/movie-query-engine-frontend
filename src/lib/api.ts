@@ -1,6 +1,7 @@
 import { Movie, MovieDetails, SearchResponse } from "@/types/movie";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL == undefined;
+// const API_BASE_URL = import.meta.env.VITE_API_URL == undefined;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function searchMovies(query: string): Promise<Movie[]> {
   if (!query.trim()) return [];
